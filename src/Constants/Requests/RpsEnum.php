@@ -2,6 +2,8 @@
 
 namespace NotaFiscalSP\Constants\Requests;
 
+use NotaFiscalSP\Entities\Requests\NF\Rps;
+
 class RpsEnum
 {
     const RPS = 'RPS';
@@ -9,7 +11,6 @@ class RpsEnum
     const EMISSION_DATE = 'DataEmissao';
     const RPS_STATUS = 'StatusRPS';
     const RPS_TAX = 'TributacaoRPS';
-    const SERVICE_VALUE = 'ValorServicos';
     const DEDUCTION_VALUE = 'ValorDeducoes';
     const PIS_VALUE = 'ValorPIS';
     const COFINS_VALUE = 'ValorCOFINS';
@@ -23,6 +24,9 @@ class RpsEnum
     const IE_TAKER = 'InscricaoEstadualTomador';
     const CORPORATE_NAME_TAKER = 'RazaoSocialTomador';
     const EMAIL_TAKER = 'EmailTomador';
+    const SERVICE_TOTAL_RECEIVED = 'ValorTotalRecebido';
+    const SERVICE_INITIAL_CHARGED = 'ValorInicialCobrado';
+    const SERVICE_FINAL_CHARGED = 'ValorFinalCobrado';
     const DISCRIMINATION = 'Discriminacao';
     const CPFCNPJ_TAKER = 'CPFCNPJTomador';
     const CPFCNPJ_INTERMEDIARY = 'CPFCNPJIntermediario';
@@ -37,6 +41,21 @@ class RpsEnum
     const CITY_INSTALLMENT = 'MunicipioPrestacao';
     const TOTAL_VALUE = 'ValorTotalRecebido';
     const ENCAPSULATION_NUMBER = 'NumeroEncapsulamento';
+    const MULTA_VALUE = 'ValorMulta';
+    const JUROS_VALUE = 'ValorJuros';
+    const IPI_VALUE = 'ValorIPI';
+    const EXIGIBILIDADE_SUSPENSA = 'ExigibilidadeSuspensa';
+    const PAGAMENTO_PARCELADO_ANTECIPADO = 'PagamentoParceladoAntecipado';
+    const NBS_FIELD = 'NBS'; //115029000
+    const NCM_FIELD = 'NCM'; //01012100
+    const LOC_PRESTACAO = 'cLocPrestacao'; //>3550308
+    const CLASS_TRIB = 'cClassTrib';
+    const FIN_NFSE = 'finNFSe';
+    const IND_FINAL = 'indFinal';
+    const IND_OP = 'cIndOp';
+    const TP_OPER = 'tpOper';
+    const TP_ENTE_GOV  = 'tpEnteGov';
+    const IND_DEST = 'indDest';
 
     public static function simpleTypes()
     {
@@ -45,7 +64,6 @@ class RpsEnum
             RpsEnum::EMISSION_DATE,
             RpsEnum::RPS_STATUS,
             RpsEnum::RPS_TAX,
-            RpsEnum::SERVICE_VALUE,
             RpsEnum::DEDUCTION_VALUE,
             RpsEnum::PIS_VALUE,
             RpsEnum::COFINS_VALUE,
@@ -55,6 +73,7 @@ class RpsEnum
             RpsEnum::SERVICE_CODE,
             RpsEnum::SERVICE_TAX,
             RpsEnum::ISS_RETENTION,
+
         ];
     }
 
@@ -66,4 +85,33 @@ class RpsEnum
             RpsEnum::CORPORATE_NAME_TAKER,
         ];
     }
+    public static function ibscbsFields()
+    {
+        return [
+            RpsEnum::FIN_NFSE,
+            RpsEnum::IND_FINAL,
+            RpsEnum::IND_OP,
+            RpsEnum::TP_OPER,
+            RpsEnum::TP_ENTE_GOV,
+            RpsEnum::IND_DEST,
+        ];
+    }
+
+
+
+    /*		<IBSCBS>
+			<finNFSe>0</finNFSe>
+			<indFinal>0</indFinal>
+			<cIndOp>100301</cIndOp>
+			<tpOper>5</tpOper>
+			<tpEnteGov>1</tpEnteGov>
+			<indDest>1</indDest>
+			<valores>
+				<trib>
+					<gIBSCBS>
+						<cClassTrib>200028</cClassTrib>
+					</gIBSCBS>
+				</trib>
+			</valores>
+		</IBSCBS> */
 }

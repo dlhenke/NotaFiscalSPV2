@@ -1,5 +1,5 @@
 <?php
-
+require_once realpath(__dir__.'/../vendor/autoload.php');
 /* *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
  *  Para esse Exemplo funcionar é necessário um certificado válido (*.pfx ou *.pem)                *
  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
@@ -10,20 +10,20 @@ use NotaFiscalSP\Entities\Requests\NFTS\Nfts;
 use NotaFiscalSP\Entities\Requests\NFTS\NftsLot;
 use NotaFiscalSP\NotaFiscalSP;
 use NotaFiscalSP\Constants\Params;
-
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
+$dotenv->load();
 $nf = new NotaFiscalSP([
-    Params::CNPJ => '00027000000000',
-    Params::IM => '00000002', // Opcional porém recomendado
-    Params::CERTIFICATE_PATH => 'examples/certificate.pfx',
-    Params::CERTIFICATE_PASS => '100001'
-]);
+    Params::CNPJ => $_ENV['CNPJ'],
+    Params::IM => $_ENV['MUNICIPAL_ID'], // Opcional porém recomendado
+    Params::CERTIFICATE_PATH => $_ENV['CERT_PATH'],
+    Params::CERTIFICATE_PASS => $_ENV['CERT_PASS']]);
 
 // Monte a NFTS
 $nfts = new Nfts();
 $nfts->setNumeroDocumento('000000000163'); // Numero da nota Relacionada a NFTS
 $nfts->setSerieNFTS('A'); // Serie da Nota relacionada
 $nfts->setCodigoServico('7099');
-$nfts->setValorServicos('165.31');
+$nfts->setValorFinalCobrado('165.31');
 $nfts->setCnpjPrestador('00000040000100');
 $nfts->setDiscriminacao('NFTS X ...');
 $nfts->setDataPrestacao('2019-09-10');

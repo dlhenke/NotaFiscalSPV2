@@ -12,7 +12,7 @@ class NftsEnum
     const DOCUMENT_NUMBER = 'NumeroDocumento';
     const STATUS = 'StatusNFTS';
     const NFTS_TAX = 'TributacaoNFTS';
-    const SERVICE_VALUE = 'ValorServicos';
+    const SERVICE_VALUE = 'ValorFinalCobrado';
     const DEDUCTIONS_VALUE = 'ValorDeducoes';
     const SERVICE_CODE = 'CodigoServico';
     const SUB_ITEM_CODE = 'CodigoSubItem';

@@ -141,7 +141,7 @@ class NftsLot implements UserRequest
             if ($nfts instanceof Nfts) {
                 $emission = $nfts->getDataEmissao() ;
                 $startDate = strtotime($emission) < strtotime($startDate)? $emission : $startDate;
-                $valorTotalServicos = $valorTotalServicos + $nfts->getValorServicos();
+                $valorTotalServicos = $valorTotalServicos + $nfts->getValorFinalCobrado();
                 $valorTotalDeducoes = $valorTotalDeducoes + $nfts->getValorDeducoes();
             }
         }

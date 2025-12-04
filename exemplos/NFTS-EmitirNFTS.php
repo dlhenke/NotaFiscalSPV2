@@ -22,7 +22,7 @@ $nfts = new Nfts();
 $nfts->setNumeroDocumento('000000000163'); // Numero da nota Relacionada a NFTS
 $nfts->setSerieNFTS('A'); // Serie da Nota relacionada
 $nfts->setCodigoServico('7099');
-$nfts->setValorServicos('165.31');
+$nfts->setValorFinalCobrado('165.31');
 $nfts->setCnpjPrestador('00000040000100');
 $nfts->setDiscriminacao('NFTS X ...');
 $nfts->setDataPrestacao('2019-09-10');

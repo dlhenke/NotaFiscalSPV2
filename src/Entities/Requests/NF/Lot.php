@@ -13,8 +13,6 @@ class Lot implements UserRequest
     private $dtInicio;
     private $dtFim;
     private $qtdRPS;
-    private $valorTotalServicos;
-    private $valorTotalDeducoes;
     private $rpsList;
 
     public function __construct()
@@ -22,22 +20,6 @@ class Lot implements UserRequest
         $this->setTransacao(true);
         $this->setDtInicio(date('Y-m-d'));
         $this->setDtFim(date('Y-m-d'));
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValorTotalDeducoes()
-    {
-        return $this->valorTotalDeducoes;
-    }
-
-    /**
-     * @param mixed $valorTotalDeducoes
-     */
-    public function setValorTotalDeducoes($valorTotalDeducoes)
-    {
-        $this->valorTotalDeducoes = $valorTotalDeducoes;
     }
 
     /**
@@ -104,21 +86,7 @@ class Lot implements UserRequest
         $this->qtdRPS = $qtdRPS;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getValorTotalServicos()
-    {
-        return $this->valorTotalServicos;
-    }
 
-    /**
-     * @param mixed $valorTotalServicos
-     */
-    public function setValorTotalServicos($valorTotalServicos)
-    {
-        $this->valorTotalServicos = $valorTotalServicos;
-    }
 
     /**
      * @return mixed
@@ -133,24 +101,18 @@ class Lot implements UserRequest
      */
     public function setRpsList(array $rpsList)
     {
-        $valorTotalServicos = 0;
-        $valorTotalDeducoes = 0;
+        // $valorTotalServicos = 0;
+        // $valorTotalDeducoes = 0;
         $startDate = $this->getDtInicio();
         foreach ($rpsList as $rps) {
             if ($rps instanceof Rps) {
-                $emission = $rps->getDataEmissao() ;
-                $startDate = strtotime($emission) < strtotime($startDate)? $emission : $startDate;
-
-                $valorTotalServicos = $valorTotalServicos + $rps->getValorServicos();
-                $valorTotalDeducoes = $valorTotalDeducoes + $rps->getValorDeducoes();
+                $emission = $rps->getDataEmissao();
+                $startDate = strtotime($emission) < strtotime($startDate) ? $emission : $startDate;
             }
         }
 
         $this->qtdRPS = count($rpsList);
         $this->setDtInicio($startDate);
-        $this->setValorTotalServicos($valorTotalServicos);
-        $this->setValorTotalDeducoes($valorTotalDeducoes);
-
         $this->rpsList = $rpsList;
     }
 
@@ -161,8 +123,6 @@ class Lot implements UserRequest
             HeaderEnum::START_DATE => $this->dtInicio,
             HeaderEnum::END_DATE => $this->dtFim,
             HeaderEnum::RPS_COUNT => $this->qtdRPS,
-            HeaderEnum::SERVICES_TOTAL => $this->valorTotalServicos,
-            HeaderEnum::DEDUCTION_TOTAL => $this->valorTotalDeducoes,
             RpsEnum::RPS => $this->rpsList,
         ];
     }

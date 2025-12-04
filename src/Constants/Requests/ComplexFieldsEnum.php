@@ -10,4 +10,5 @@ class ComplexFieldsEnum
     const CNPJ_TAX_PAYER = 'CNPJContribuinte';
     const ADDRESS_TAKER = 'EnderecoTomador';
     const ADDRESS = 'Endereco';
+    const IBSCBS = 'IBSCBS';
 }

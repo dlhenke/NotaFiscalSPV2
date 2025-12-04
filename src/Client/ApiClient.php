@@ -12,6 +12,13 @@ class ApiClient
 {
     public static function send(WsdlBase $wsdlBase, $method, BaseInformation $baseInformation)
     {
+
+            $dom = new \DOMDocument('1.0', 'UTF-8');
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($baseInformation->getXml());
+            $dom->save('xmls/'.date('YmdHis') . '_request.xml');
+            exit;
         $options = [
             'location' => $wsdlBase->getEndPoint(),
             'keep_alive' => true,
@@ -24,15 +31,20 @@ class ApiClient
         try {
             $client = new SoapClient($wsdlBase->getWsdl(), $options);
 
+
+
+
             $arguments = [
                 $method => [
-                    'VersaoSchema' => 1,
+                    'VersaoSchema' => 2,
                     'MensagemXML' => $baseInformation->getXml()
                 ],
             ];
 
             $options = [];
             $result = $client->__soapCall($method, $arguments, $options);
+            $dom->loadXML($result->RetornoXML);
+            $dom->save('xmls/'.date('YmdHis') . '_response.xml');
             return $result->RetornoXML;
         } catch (Exception $e) {
             $response = new BasicResponse();

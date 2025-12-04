@@ -12,6 +12,7 @@ class General
      * @return mixed|null
      *  Gets a array key path like 'key1.key2.key3' and returns $array[key1][key2][key3]
      */
+
     public static function getPath($array, $keyPath)
     {
         $keys = explode('.', $keyPath);
@@ -33,7 +34,31 @@ class General
     {
         return preg_replace("/\D+/", "", (string)$value);
     }
+    public static function regexCnpj($value)
+    {
+        return preg_replace('/[^A-Z0-9]/', '', (string)strtoupper($value));
+    }
+    public static function validateCnpj($value)
+    {
+        $c = preg_replace('/[^A-Z0-9]/', '', strtoupper($value));
+        if (strlen($c) !== 14 || preg_match('/^0{14}$/', $c)) return false;
 
+        $b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        $getCharValue = function ($char) {
+            return ($char >= 'A') ? ord($char) - 48 : (int)$char;
+        };
+
+        $checkDigit = function ($pos) use ($c, $b, $getCharValue) {
+            $sum = 0;
+            for ($i = 0; $i < $pos; $i++) {
+                $sum += $getCharValue($c[$i]) * $b[$i + ($pos === 12)];
+            }
+            $n = $sum % 11;
+            return $c[$pos] == ($n < 2 ? 0 : 11 - $n);
+        };
+
+        return $checkDigit(12) && $checkDigit(13);
+    }
     public static function filterDate($date)
     {
         if (strpos($date, '/') !== false) {
@@ -42,17 +67,92 @@ class General
         return $date;
     }
 
-    public static function filterString($value){
-        $unwanted_array = array('?' => '','!' => '','#' => '','$' => '','_' => '',']' => '','[' => '',')' => '', '(' => '','-' => '','.' =>'',',' => '','Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
-            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
-            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
-        return trim(strtr( $value, $unwanted_array));
+    public static function filterString($value)
+    {
+        $unwanted_array = array(
+            '?' => '',
+            '!' => '',
+            '#' => '',
+            '$' => '',
+            '_' => '',
+            ']' => '',
+            '[' => '',
+            ')' => '',
+            '(' => '',
+            '-' => '',
+            '.' => '',
+            ',' => '',
+            'Š' => 'S',
+            'š' => 's',
+            'Ž' => 'Z',
+            'ž' => 'z',
+            'À' => 'A',
+            'Á' => 'A',
+            'Â' => 'A',
+            'Ã' => 'A',
+            'Ä' => 'A',
+            'Å' => 'A',
+            'Æ' => 'A',
+            'Ç' => 'C',
+            'È' => 'E',
+            'É' => 'E',
+            'Ê' => 'E',
+            'Ë' => 'E',
+            'Ì' => 'I',
+            'Í' => 'I',
+            'Î' => 'I',
+            'Ï' => 'I',
+            'Ñ' => 'N',
+            'Ò' => 'O',
+            'Ó' => 'O',
+            'Ô' => 'O',
+            'Õ' => 'O',
+            'Ö' => 'O',
+            'Ø' => 'O',
+            'Ù' => 'U',
+            'Ú' => 'U',
+            'Û' => 'U',
+            'Ü' => 'U',
+            'Ý' => 'Y',
+            'Þ' => 'B',
+            'ß' => 'Ss',
+            'à' => 'a',
+            'á' => 'a',
+            'â' => 'a',
+            'ã' => 'a',
+            'ä' => 'a',
+            'å' => 'a',
+            'æ' => 'a',
+            'ç' => 'c',
+            'è' => 'e',
+            'é' => 'e',
+            'ê' => 'e',
+            'ë' => 'e',
+            'ì' => 'i',
+            'í' => 'i',
+            'î' => 'i',
+            'ï' => 'i',
+            'ð' => 'o',
+            'ñ' => 'n',
+            'ò' => 'o',
+            'ó' => 'o',
+            'ô' => 'o',
+            'õ' => 'o',
+            'ö' => 'o',
+            'ø' => 'o',
+            'ù' => 'u',
+            'ú' => 'u',
+            'û' => 'u',
+            'ý' => 'y',
+            'þ' => 'b',
+            'ÿ' => 'y'
+        );
+        return trim(strtr($value, $unwanted_array));
     }
 
-    public static function filterMonetaryValue($value){
-        return number_format((float)$value, 2, '.','');
+    public static function filterMonetaryValue($value)
+    {
+        return number_format((float)$value, 2, '.', '');
     }
 
     public static function convertUserRequest($request)
@@ -74,7 +174,5 @@ class General
         }
 
         return [];
-
     }
-
 }

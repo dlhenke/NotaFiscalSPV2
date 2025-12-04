@@ -27,8 +27,8 @@ class PedidoEnvioLoteRPS extends NfAbstract
             HeaderEnum::START_DATE => General::getKey($lot, HeaderEnum::START_DATE),
             HeaderEnum::END_DATE => General::getKey($lot, HeaderEnum::END_DATE),
             HeaderEnum::RPS_COUNT => General::getKey($lot, HeaderEnum::RPS_COUNT),
-            HeaderEnum::SERVICES_TOTAL => General::getKey($lot, HeaderEnum::SERVICES_TOTAL),
-            HeaderEnum::DEDUCTION_TOTAL => General::getKey($lot, HeaderEnum::DEDUCTION_TOTAL),
+            //HeaderEnum::SERVICES_TOTAL => General::getKey($lot, HeaderEnum::SERVICES_TOTAL),
+           // HeaderEnum::DEDUCTION_TOTAL => General::getKey($lot, HeaderEnum::DEDUCTION_TOTAL),
         ]);
         $allRps = $this->makeRPS($information, $documents);
 

@@ -20,7 +20,7 @@ $nf = new NotaFiscalSP([
 // Monte a RPS
 $rps = new Rps();
 $rps->setNumeroRps('300000000');
-$rps->setValorServicos(30.80);
+$rps->setValorFinalCobrado(30.80);
 $rps->setCodigoServico(2881);
 $rps->setAliquotaServicos(0.029);
 $rps->setCnpj('20000004000100');

@@ -20,7 +20,7 @@ abstract class NftsAbstract implements InputTransformer
 
         $header = [
             '_attributes' => [
-                HeaderEnum::VERSION => 1
+                HeaderEnum::VERSION => 2
             ],
         ];
 

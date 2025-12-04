@@ -65,7 +65,7 @@ class Period implements UserRequest
      */
     public function setCnpj($cnpj)
     {
-        $this->cnpj = sprintf('%014s',General::onlyNumbers($cnpj));
+        $this->cnpj = sprintf('%014s',General::regexCnpj($cnpj));
         return $this;
     }
 

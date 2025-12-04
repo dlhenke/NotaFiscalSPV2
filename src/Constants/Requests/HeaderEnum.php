@@ -40,14 +40,6 @@ class HeaderEnum
     const RPS_COUNT = 'QtdRPS';
     const NFTS_COUNT = 'QtdNFTS';
 
-    /**
-     * @money 00.00
-     */
-    const SERVICES_TOTAL = 'ValorTotalServicos';
-    /**
-     * @money 00.00
-     */
-    const DEDUCTION_TOTAL = 'ValorTotalDeducoes';
 
     public static function simpleTypes()
     {
@@ -61,8 +53,6 @@ class HeaderEnum
             HeaderEnum::PAGE_NUMBER,
             HeaderEnum::RPS_COUNT,
             HeaderEnum::NFTS_COUNT,
-            HeaderEnum::SERVICES_TOTAL,
-            HeaderEnum::DEDUCTION_TOTAL,
         ];
     }
 }

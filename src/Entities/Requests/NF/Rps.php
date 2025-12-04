@@ -21,7 +21,6 @@ class Rps implements UserRequest
     private $dataEmissao;
     private $statusRps;
     private $tributacaoRps;
-    private $valorServicos;
     private $valorDeducoes;
     private $valorPIS;
     private $valorCOFINS;
@@ -60,6 +59,24 @@ class Rps implements UserRequest
     private $cep;
     private $cpf;
     private $cnpj;
+    private $valorTotalRecebido;
+    private $valorInicialCobrado;
+    private $valorFinalCobrado;
+    private $valorMulta;
+    private $valorJuros;
+    private $valorIPI;
+    private $exigibilidadeSuspensa;
+    private $pagamentoParceladoAntecipado;
+    private $nbsField;
+    private $ncmField;
+    private $locPrestacao;
+    private $classTrib;
+    private $finNfse;
+    private $indFinal;
+    private $indOp;
+    private $tpOper;
+    private $tpEnteGov;
+    private $indDest;
 
     public function __construct()
     {
@@ -68,11 +85,10 @@ class Rps implements UserRequest
         $this->setDataEmissao(date('Y-m-d'));
         $this->setTributacaoRps(TaxType::IN_SP);
         $this->setValorDeducoes(0);
-        $this->setValorServicos(0);
+        $this->setValorFinalCobrado(0);
         $this->setIssRetido(false);
         $this->setSerieRps('A');
         $this->setAliquotaServicos('0');
-//        $this->setCidade(3550308); // SP CODE
     }
 
     /**
@@ -88,7 +104,7 @@ class Rps implements UserRequest
      */
     public function setCnpjIntermediario($cnpjIntermediario)
     {
-        $this->cnpjIntermediario = $cnpjIntermediario;
+        $this->cnpjIntermediario = General::regexCnpj($cnpjIntermediario);
     }
 
     public function toArray()
@@ -102,9 +118,11 @@ class Rps implements UserRequest
             RpsEnum::EMISSION_DATE => $this->dataEmissao,
             RpsEnum::RPS_STATUS => $this->statusRps,
             RpsEnum::RPS_TAX => $this->tributacaoRps,
-            RpsEnum::SERVICE_VALUE => $this->valorServicos,
             RpsEnum::DEDUCTION_VALUE => $this->valorDeducoes,
             RpsEnum::PIS_VALUE => $this->valorPIS,
+            RpsEnum::MULTA_VALUE => $this->valorPIS,
+            RpsEnum::JUROS_VALUE => $this->valorPIS,
+            RpsEnum::IPI_VALUE => $this->valorPIS,
             RpsEnum::COFINS_VALUE => $this->valorCOFINS,
             RpsEnum::INSS_VALUE => $this->valorINSS,
             RpsEnum::IR_VALUE => $this->valorIR,
@@ -130,6 +148,23 @@ class Rps implements UserRequest
             RpsEnum::CPFCNPJ_TAKER => $this->cpfCnpjTomador,
             RpsEnum::CORPORATE_NAME_TAKER => $this->razaoSocialTomador,
             RpsEnum::EMAIL_TAKER => $this->emailTomador,
+            RpsEnum::SERVICE_TOTAL_RECEIVED => $this->valorTotalRecebido,
+            RpsEnum::SERVICE_INITIAL_CHARGED => $this->valorInicialCobrado,
+            RpsEnum::SERVICE_FINAL_CHARGED => $this->valorFinalCobrado,
+            RpsEnum::EXIGIBILIDADE_SUSPENSA => $this->exigibilidadeSuspensa,
+            RpsEnum::PAGAMENTO_PARCELADO_ANTECIPADO => $this->pagamentoParceladoAntecipado,
+            RpsEnum::NBS_FIELD => $this->nbsField,
+            RpsEnum::NCM_FIELD => $this->ncmField,
+            RpsEnum::LOC_PRESTACAO => $this->locPrestacao,
+            RpsEnum::CLASS_TRIB => $this->classTrib,
+            RpsEnum::FIN_NFSE => $this->finNfse,
+            RpsEnum::IND_FINAL => $this->indFinal,
+            RpsEnum::IND_OP => $this->indOp,
+            RpsEnum::TP_OPER => $this->tpOper,
+            RpsEnum::TP_ENTE_GOV => $this->tpEnteGov,
+            RpsEnum::IND_DEST => $this->indDest,
+
+
             SimpleFieldsEnum::TYPE_ADDRESS => $this->tipoLogradouro,
             SimpleFieldsEnum::ADDRESS => $this->logradouro,
             SimpleFieldsEnum::ADDRESS_NUMBER => $this->numeroEndereco,
@@ -172,7 +207,7 @@ class Rps implements UserRequest
      */
     public function setCnpj($cnpj)
     {
-        $this->cnpj = sprintf('%014s', General::onlyNumbers($cnpj));
+        $this->cnpj = sprintf('%014s', General::regexCnpj($cnpj));
     }
 
 
@@ -295,22 +330,6 @@ class Rps implements UserRequest
     /**
      * @return mixed
      */
-    public function getValorServicos()
-    {
-        return $this->valorServicos;
-    }
-
-    /**
-     * @param mixed $valorServicos
-     */
-    public function setValorServicos($valorServicos)
-    {
-        $this->valorServicos = General::filterMonetaryValue($valorServicos);
-    }
-
-    /**
-     * @return mixed
-     */
     public function getValorDeducoes()
     {
         return $this->valorDeducoes;
@@ -337,7 +356,7 @@ class Rps implements UserRequest
      */
     public function setValorPIS($valorPIS)
     {
-        $this->valorPIS = $valorPIS;
+        $this->valorPIS = General::filterMonetaryValue($valorPIS);
     }
 
     /**
@@ -353,7 +372,7 @@ class Rps implements UserRequest
      */
     public function setValorCOFINS($valorCOFINS)
     {
-        $this->valorCOFINS = $valorCOFINS;
+        $this->valorCOFINS = General::filterMonetaryValue($valorCOFINS);
     }
 
     /**
@@ -369,7 +388,7 @@ class Rps implements UserRequest
      */
     public function setValorINSS($valorINSS)
     {
-        $this->valorINSS = $valorINSS;
+        $this->valorINSS = General::filterMonetaryValue($valorINSS);
     }
 
     /**
@@ -385,7 +404,7 @@ class Rps implements UserRequest
      */
     public function setValorIR($valorIR)
     {
-        $this->valorIR = $valorIR;
+        $this->valorIR = General::filterMonetaryValue($valorIR);
     }
 
     /**
@@ -401,7 +420,7 @@ class Rps implements UserRequest
      */
     public function setValorCSLL($valorCSLL)
     {
-        $this->valorCSLL = $valorCSLL;
+        $this->valorCSLL = General::filterMonetaryValue($valorCSLL);
     }
 
     /**
@@ -869,4 +888,241 @@ class Rps implements UserRequest
     {
         $this->cep = sprintf('%08s', General::onlyNumbers($cep));
     }
+
+    /**
+     * @return mixed
+     */
+    public function getValorFinalCobrado()
+    {
+        return $this->valorFinalCobrado;
+    }
+
+    /**
+     * @param mixed $ValorFinalCobrado
+     */
+    public function setValorFinalCobrado($valorFinalCobrado)
+    {
+        $this->valorFinalCobrado = General::filterMonetaryValue($valorFinalCobrado);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExigibilidadeSuspensa()
+    {
+        return $this->exigibilidadeSuspensa;
+    }
+
+    /**
+     * @param mixed $exigibilidadeSuspensa
+     */
+    public function setExigibilidadeSuspensa($exigibilidadeSuspensa)
+    {
+        $this->exigibilidadeSuspensa = $exigibilidadeSuspensa;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPagamentoParceladoAntecipado()
+    {
+        return $this->pagamentoParceladoAntecipado;
+    }
+
+    /**
+     * @param mixed $pagamentoParceladoAntecipado
+     */
+    public function setPagamentoParceladoAntecipado($pagamentoParceladoAntecipado)
+    {
+        $this->pagamentoParceladoAntecipado = $pagamentoParceladoAntecipado;
+    }
+    /**
+     * @return mixed
+     */
+    public function getNbs()
+    {
+        return $this->nbsField;
+    }
+
+    /**
+     * @param mixed $nbsField
+     */
+    public function setNbs($nbsField)
+    {
+        $this->nbsField = $nbsField;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getLocPrestacao()
+    {
+        return $this->locPrestacao;
+    }
+
+    /**
+     * @param mixed $locPrestacao
+     */
+    public function setlocPrestacao($locPrestacao)
+    {
+        $this->locPrestacao = $locPrestacao;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValorMulta()
+    {
+        return $this->valorMulta;
+    }
+
+    /**
+     * @param mixed $valorPIS
+     */
+    public function setValorMulta($valorMulta)
+    {
+        $this->valorMulta = General::filterMonetaryValue($valorMulta);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValorJuros()
+    {
+        return $this->valorJuros;
+    }
+
+    /**
+     * @param mixed $valorPIS
+     */
+    public function setValorJuros($valorJuros)
+    {
+        $this->valorJuros = General::filterMonetaryValue($valorJuros);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValorIPI()
+    {
+        return $this->valorIPI;
+    }
+
+    /**
+     * @param mixed $valorIPI
+     */
+    public function setValorIPI($valorIPI)
+    {
+        $this->valorIPI = General::filterMonetaryValue($valorIPI);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClassTrib()
+    {
+        return $this->classTrib;
+    }
+
+    /**
+     * @param mixed $classTrib
+     */
+    public function setClassTrib($classTrib)
+    {
+        $this->classTrib = $classTrib;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFinNfse()
+    {
+        return $this->finNfse;
+    }
+
+    /**
+     * @param mixed $classTrib
+     */
+    public function setFinNfse($finNfse)
+    {
+        $this->finNfse = $finNfse;
+    }
+    /**
+     * @return mixed
+     */
+    public function getIndFinal()
+    {
+        return $this->indFinal;
+    }
+
+    /**
+     * @param mixed $classTrib
+     */
+    public function setIndFinal($indFinal)
+    {
+        $this->indFinal = $indFinal;
+    }
+    /**
+     * @return mixed
+     */
+    public function getIndOp()
+    {
+        return $this->indOp;
+    }
+
+    /**
+     * @param mixed $indOp
+     */
+    public function setIndOp($indOp)
+    {
+        $this->indOp = $indOp;
+    }
+    /**
+     * @return mixed
+     */
+    public function getTpOper()
+    {
+        return $this->tpOper;
+    }
+
+    /**
+     * @param mixed $tpOper
+     */
+    public function setTpOper($tpOper)
+    {
+        $this->tpOper = $tpOper;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTpEnteGov()
+    {
+        return $this->tpEnteGov;
+    }
+
+    /**
+     * @param mixed $classTrib
+     */
+    public function setTpEnteGov($tpEnteGov)
+    {
+        $this->tpEnteGov = $tpEnteGov;
+    }
+    /**
+     * @return mixed
+     */
+    public function getIndDest()
+    {
+        return $this->indDest;
+    }
+
+    /**
+     * @param mixed $indDest
+     */
+    public function setIndDest($indDest)
+    {
+        $this->indDest = $indDest;
+    }
+
 }

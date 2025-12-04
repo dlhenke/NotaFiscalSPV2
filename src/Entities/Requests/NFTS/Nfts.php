@@ -19,7 +19,7 @@ class Nfts implements UserRequest
     private $dataPrestacao;
     private $statusNFTS;
     private $tributacaoNFTS;
-    private $valorServicos;
+    private $ValorFinalCobrado;
     private $serieNFTS;
     private $numeroDocumento;
     private $valorDeducoes;
@@ -57,7 +57,7 @@ class Nfts implements UserRequest
         $this->setTipoNFTS(NFTSType::TAKER);
         $this->setTributacaoNFTS(NFTSTaxType::NORMAL);
         $this->setValorDeducoes(0);
-        $this->setValorServicos(0);
+        $this->setValorFinalCobrado(0);
         $this->setAliquotaServicos(0.5);
         $this->setDataPrestacao(date('Y-m-d'));
         $this->setTipoDocumento(DocumentType::REQUIRED_EMISSION_FISCAL_DOCUMENT);
@@ -315,17 +315,17 @@ class Nfts implements UserRequest
     /**
      * @return mixed
      */
-    public function getValorServicos()
+    public function getValorFinalCobrado()
     {
-        return $this->valorServicos;
+        return $this->ValorFinalCobrado;
     }
 
     /**
-     * @param mixed $valorServicos
+     * @param mixed $ValorFinalCobrado
      */
-    public function setValorServicos($valorServicos)
+    public function setValorFinalCobrado($ValorFinalCobrado)
     {
-        $this->valorServicos = General::filterMonetaryValue($valorServicos);
+        $this->ValorFinalCobrado = General::filterMonetaryValue($ValorFinalCobrado);
     }
 
     /**
@@ -670,7 +670,7 @@ class Nfts implements UserRequest
             NftsEnum::NFTS_SERIES => $this->serieNFTS,
             NftsEnum::DOCUMENT_NUMBER => $this->numeroDocumento,
             NftsEnum::NFTS_TAX => $this->tributacaoNFTS,
-            NftsEnum::SERVICE_VALUE => $this->valorServicos,
+            NftsEnum::SERVICE_VALUE => $this->ValorFinalCobrado,
             NftsEnum::DEDUCTIONS_VALUE => $this->valorDeducoes,
             NftsEnum::SERVICE_CODE => $this->codigoServico,
             NftsEnum::SUB_ITEM_CODE => $this->codigoSubItem,

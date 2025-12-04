@@ -187,7 +187,7 @@ class BaseInformation
      */
     public function setCnpj($cnpj)
     {
-        $this->cnpj = General::onlyNumbers($cnpj);
+         $this->cnpj = sprintf('%014s',General::regexCnpj($cnpj));
     }
 
     /**

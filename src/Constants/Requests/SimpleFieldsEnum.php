@@ -33,7 +33,8 @@ class SimpleFieldsEnum
     const EMISSION_TYPE = 'TipoEmissaoGuia';
     const PAYMENT_DATE = 'DataPagamento';
     const LOT_NUMBER = 'NumeroLote';
-
+    Const NBS ='NBS';
+    const NCM ='NCM';
     public static function addressFields()
     {
         return [
