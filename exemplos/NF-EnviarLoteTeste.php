@@ -22,7 +22,6 @@ $nf = new NotaFiscalSP([
 $rps = new Rps();
 $rps->setNumeroRps('300000001');
 $rps->setTipoRps(RPSType::RECIBO_PROVISORIO);
-$rps->setValorPIS(0.00);
 $rps->setValorCOFINS(0.00);
 $rps->setValorINSS(0.00);
 $rps->setValorIR(0.00);
@@ -40,6 +39,7 @@ $rps->setUf('SP');
 $rps->setCep('00000000');
 $rps->setEmailTomador('teste@teste.com.br');
 $rps->setDiscriminacao('Teste Emissão de Notas pela API');
+$rps->setValorPIS(0.00);
 $rps->setValorFinalCobrado(30.80);
 $rps->setExigibilidadeSuspensa(0); // 0 - Não | 1 - Sim
 $rps->setPagamentoParceladoAntecipado(0); // 0 - Não | 1 - Sim

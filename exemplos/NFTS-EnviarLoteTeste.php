@@ -36,6 +36,19 @@ $nfts->setBairroPrestador('Vila x');
 $nfts->setUfPrestador('SP');
 $nfts->setCepPrestador('06000000');
 
+$nfts->setValorPIS(0.00);
+$nfts->setExigibilidadeSuspensa(0); // 0 - Não | 1 - Sim
+$nfts->setPagamentoParceladoAntecipado(0); // 0 - Não | 1 - Sim
+$nfts->setNbs("115029000");
+$nfts->setlocPrestacao('3550308');
+$nfts->setClassTrib('200028');//410999
+$nfts->setFinNFSe(0);
+$nfts->setIndFinal(0);
+$nfts->setIndOp('100301');
+$nfts->setTpOper(5);
+$nfts->setTpEnteGov(1);
+$nfts->setIndDest(1);
+
 // Crie o Lote
 $lot = new NftsLot();
 $lot->setNftsList(
