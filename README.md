@@ -19,13 +19,13 @@ O Projeto se trata de um módulo de integração com o sistema de notas da Prefe
 - SSH1 não é o padrão para as novas versões de OPENSSL
 - para contornar os erros edite o arquivo /etc/ssl/openssl.cnf
 - # List of providers to load
-[provider_sect]
-default = default_sect
-legacy = legacy_sect
-- ......
-[default_sect]
+ [provider_sect]
+ default = default_sect
+ legacy = legacy_sect
+
+ [default_sect]
  activate = 1
-[legacy_sect]
+ [legacy_sect]
  activate = 1
 
   It should be noted that the default signature algorithm used by openssl_sign() and openssl_verify (OPENSSL_ALGO_SHA1) is no longer supported by default in OpenSSL Version 3 series.
