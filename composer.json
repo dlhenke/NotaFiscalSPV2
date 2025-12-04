@@ -1,6 +1,6 @@
 {
     "name": "dlhenke/notafiscalspv2",
-    "description": "Integração com o WebService da Prefeitura de São Paulo para emissão de NFS e NTFS utilizando a API da nota do milhão Versão 2 (2026 Reforma Tributária)",
+    "description": "Integração com o WebService da Prefeitura de Sao Paulo para emissao de NFS e NTFS utilizando a API da nota do milhao Versao 2",
     "type": "library",
     "license": "MIT",
     "require": {
